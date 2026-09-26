@@ -89,7 +89,7 @@ Then open the project folder in VS Code.
 
 Make sure Python is installed on your system.
 
-You can check with:
+You can check your Python installation with:
 
 ```bash
 python --version
@@ -99,15 +99,19 @@ python --version
 
 ## 3. Install the required packages
 
-Install the dependencies with:
+This project includes a `requirements.txt` file containing the required Python packages.
+
+Install everything with:
 
 ```bash
-pip install discord.py python-dotenv
+pip install -r requirements.txt
 ```
+
+You do not need to install the packages individually.
 
 ---
 
-## 4. Create the `.env` file
+## 4. Configure the `.env` file
 
 Create a file named:
 
@@ -115,7 +119,7 @@ Create a file named:
 .env
 ```
 
-in the **same folder as the main Python file**.
+in the **same folder as `MV_main.py`**.
 
 Your folder should look like:
 
@@ -123,6 +127,7 @@ Your folder should look like:
 Mods-Vault/
 │
 ├── MV_main.py
+├── requirements.txt
 └── .env
 ```
 
@@ -134,7 +139,9 @@ MV_TOKEN=YOUR_BOT_TOKEN_HERE
 
 The bot reads the token using the `MV_TOKEN` environment variable.
 
-**Never share your bot token or upload your real `.env` file to GitHub.**
+**Never share your bot token publicly.**
+
+If you are uploading the project to GitHub, make sure your real `.env` file is not committed to the repository.
 
 ---
 
@@ -144,7 +151,7 @@ Mods Vault stores submitted proofs inside Discord channels.
 
 Before running the bot, you need to provide the IDs of the Discord channels that should be used for proof storage.
 
-In the main Python file, find:
+In `MV_main.py`, find:
 
 ```python
 PROOF_STORAGE_CHANNEL_IDS = [
@@ -165,7 +172,7 @@ PROOF_STORAGE_CHANNEL_IDS = [
 
 You can provide **one channel or multiple channels**.
 
-If multiple channels are provided, the bot cycles through them when storing proofs.
+If multiple channels are provided, the bot cycles through them when selecting a storage channel.
 
 ### Important
 
@@ -198,18 +205,18 @@ Mods Vault uses:
 
 The code enables these intents when creating the bot.
 
-After creating the bot, invite it to your Discord server with the permissions required for moderation and channel management.
+After creating the bot, invite it to your Discord server with the permissions required for the features you intend to use.
 
-For the complete feature set, the bot needs appropriate permissions to:
+For the complete feature set, the bot needs appropriate permissions for:
 
-* Moderate members
-* Manage roles
-* Manage channels
-* Send messages
-* Read message history
-* Attach files
-* View channels
-* Manage messages where required
+* Moderating members
+* Managing roles
+* Managing channels
+* Sending messages
+* Reading message history
+* Attaching files
+* Viewing channels
+* Managing messages where required
 
 ---
 
@@ -221,7 +228,7 @@ Once the setup is complete, run:
 python MV_main.py
 ```
 
-If your file has a different name, replace `MV_main.py` with the actual filename.
+If your main Python file has a different name, replace `MV_main.py` with the actual filename.
 
 If everything is configured correctly, the bot will connect to Discord.
 
@@ -233,7 +240,7 @@ The SQLite databases will be created automatically in the same project directory
 
 You do **not** need to manually create the database files.
 
-Mods Vault automatically creates databases for:
+Mods Vault automatically creates:
 
 ```text
 Action_logs_all_server.db
@@ -245,7 +252,7 @@ proof_queue.db
 
 These files contain the bot's runtime data and are generated automatically by the application.
 
-For that reason, database files should generally **not be uploaded to the repository**.
+For this reason, database files should generally **not be uploaded to the repository**.
 
 ---
 
@@ -253,18 +260,27 @@ For that reason, database files should generally **not be uploaded to the reposi
 
 Never upload sensitive information such as:
 
-* `.env`
-* Discord bot token
+* Your Discord bot token
 * Private server credentials
 * Runtime database files containing moderation data
 
-For GitHub, create a `.env.example` file instead:
+Your `.env` file should remain private.
+
+For GitHub, you can provide an example file such as:
+
+```text
+.env.example
+```
+
+containing:
 
 ```env
 MV_TOKEN=YOUR_BOT_TOKEN_HERE
 ```
 
-And add `.env` to `.gitignore`:
+Your actual `.env` should contain your real token locally.
+
+It is also recommended to add the following to `.gitignore`:
 
 ```gitignore
 .env
@@ -277,24 +293,40 @@ __pycache__/
 
 # 🧩 Project Structure
 
-A minimal setup looks like:
+A clean repository can look like:
 
 ```text
 Mods-Vault/
 │
 ├── MV_main.py
+├── requirements.txt
 ├── .env.example
 ├── .gitignore
 └── README.md
 ```
 
-The `.env` file and SQLite databases are created/maintained locally and should not be committed to the repository.
+Your local setup will additionally contain:
+
+```text
+.env
+Action_logs_all_server.db
+mute_data.db
+temporary_roles.db
+server_config.db
+proof_queue.db
+```
+
+These are local configuration/runtime files and do not need to be included in the repository.
 
 ---
 
 # ⚠️ Current Limitations
 
-The proof-storage channels are currently configured directly in the Python source code through `PROOF_STORAGE_CHANNEL_IDS`.
+The proof-storage channels are currently configured directly in the Python source code through:
+
+```python
+PROOF_STORAGE_CHANNEL_IDS
+```
 
 When using the bot on another server, replace these IDs with channels accessible to your bot.
 
@@ -305,5 +337,3 @@ When using the bot on another server, replace these IDs with channels accessible
 Mods Vault is a personal/student project developed to solve a real moderation workflow.
 
 The bot is **not currently hosted as a public service**. The repository contains the source code for running your own instance.
-
----
